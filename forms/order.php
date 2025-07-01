@@ -131,15 +131,16 @@ if (!isset($_SESSION['empid'])) {
             timerProgressBar: true,
         })
 
-        function addToCart(name, price, qtyInputId) {
+        function addToCart(id, name, price, qtyInputId) {
+            console.log(id, name, price, qtyInputId);
             const qtyField = document.getElementById(qtyInputId);
             const qty = parseInt(qtyField?.value) || 1;
 
-            const existing = cart.find(item => item.name === name);
+            const existing = cart.find(item => item.id === id);
             if (existing) {
                 existing.qty += qty;
             } else {
-                cart.push({ name, price, qty });
+                cart.push({ id, name, price, qty });
             }
 
             Toast.fire({
@@ -199,6 +200,7 @@ if (!isset($_SESSION['empid'])) {
         }
 
         function checkout() {
+            console.log('cart item:', cart);
             if (cart.length === 0) {
                 Toast.fire({
                     icon: 'warning',
@@ -208,11 +210,13 @@ if (!isset($_SESSION['empid'])) {
             } else {
                 Swal.fire({ title: 'Order Placed!', icon: 'success' })
                     .then(() => {
-
+                        fetch
                     })
+                    .then(() => {
+                        cart = [];
+                    });
             }
 
-            cart = [];
             updateCartModal();
             const modal = bootstrap.Modal.getInstance(document.getElementById('cartModal'));
             modal.hide();
@@ -244,7 +248,7 @@ if (!isset($_SESSION['empid'])) {
                                     <p>RM ${parseFloat(product.price).toFixed(2)}</p>
                                     <div class="mt-auto d-flex align-items-center">
                                         <input type="number" class="form-control form-control-sm me-2" id="qty-${product.id}" value="1" min="1" style="width: 60px;">
-                                        <button class="btn btn-sm btn-warning text-white" onclick="addToCart('${product.name.replace(/'/g, "\\'")}', ${product.price}, 'qty-${product.id}')">Add</button>
+                                        <button class="btn btn-sm btn-warning text-white" onclick="addToCart('${product.id}', '${product.name.replace(/'/g, "\\'")}', ${product.price}, 'qty-${product.id}')">Add</button>
                                     </div>
                                 </div>
                             </div>
