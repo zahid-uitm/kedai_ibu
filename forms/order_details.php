@@ -7,14 +7,22 @@ if (!isset($_SESSION['empid'])) {
     exit;
 }
 
-// Fetch order data
-$order = [];
-$query = "SELECT ORDERID, TO_CHAR(ORDERDATETIME, 'YYYY-MM-DD HH24:MI:SS') AS ORDERDATETIME FROM ORDERS";
+if (!isset($_GET['orderid'])) {
+    header("Location: order.php");
+    exit;
+}
+
+$orderid = $_GET['orderid'];
+
+// Fetch order product data
+$orderProd = [];
+$query = "SELECT * FROM ORDERPRODUCT OP JOIN PRODUCT P ON OP.PRODUCTID = P.PRODID WHERE OP.ORDERID = :orderid";
 $stid = oci_parse($dbconn, $query);
+oci_bind_by_name($stid, ":orderid", $orderid);
 oci_execute($stid);
 
 while ($row = oci_fetch_assoc($stid)) {
-    $order[] = $row;
+    $orderProd[] = $row;
 }
 
 oci_free_statement($stid);
@@ -32,30 +40,31 @@ oci_close($dbconn);
 
 <body>
     <div class="container mt-4">
-        <h1 class="mb-4 text-center"> Order Form</h1>
-        <div class="d-flex align-items-end mb-3">
-            <a href="order_product2.php" class="btn btn-success">+ Create Order</a>
-        </div>
+        <h1 class="mb-4 text-center"> Order Details Form</h1>
 
         <table class="table table-bordered table-hover">
             <thead class="table-dark">
                 <tr>
                     <th>Order ID</th>
-                    <th>Order Date and Time</th>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($order as $ord): ?>
+                <?php foreach ($orderProd as $ord): ?>
                     <tr>
                         <td><?= htmlspecialchars($ord['ORDERID']) ?></td>
-                        <td><?= date('Y-m-d H:i:s', strtotime($ord['ORDERDATETIME'])) ?></td>
+                        <td><?= htmlspecialchars($ord['PRODUCTID']) ?></td>
+                        <td><?= htmlspecialchars($ord['PRODNAME']) ?></td>
+                        <td><?= htmlspecialchars($ord['QUANTITY']) ?></td>
+                        <td>RM <?= number_format($ord['AMOUNT'], 2) ?></td>
                         <td>
-                            <a href="order_details.php?orderid=<?= $ord['ORDERID'] ?>"
-                                class="btn btn-sm btn-secondary">Details</a>
-                            <a href="order_update.php?orderid=<?= $ord['ORDERID'] ?>"
+                            <a href="order_details_update.php?opid=<?= $ord['ORDERID'] ?>&pid=<?= $ord['PRODUCTID'] ?>"
                                 class="btn btn-sm btn-primary">Edit</a>
-                            <a href="order_delete.php?orderid=<?= $ord['ORDERID'] ?>" class="btn btn-sm btn-danger"
+                            <a href="order_details_delete.php?opid=<?= $ord['ORDERID'] ?>&pid=<?= $ord['PRODUCTID'] ?>" class="btn btn-sm btn-danger"
                                 onclick="return confirm('Are you sure to delete this order?');">Delete</a>
                         </td>
                     </tr>

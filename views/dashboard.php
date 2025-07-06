@@ -77,10 +77,16 @@
           <i class="fa fa-file-alt me-2"></i> Forms <i class="fa fa-caret-down float-end"></i>
         </a>
         <div class="collapse ps-3 mb-2" id="formsMenu">
-          <a class="nav-link small" href="../views/employee_form.php"><i class="fa fa-user me-2"></i> Employee Form</a>
-          <a class="nav-link small" href="../views/category_form.php"><i class="fa fa-tags me-2"></i> Category Form</a>
-          <a class="nav-link small" href="../views/product_form.php"><i class="fa fa-box-open me-2"></i> Product Form</a>
+          <a class="nav-link small" href="../forms/employee.php"><i class="fa fa-user me-2"></i> Employee Form</a>
+          <a class="nav-link small" href="../forms/fulltime.php"><i class="fa fa-user-tie me-2"></i> Full-Time Employee
+            Form</a>
+          <a class="nav-link small" href="../forms/parttime.php"><i class="fa fa-user-clock me-2"></i> Part-Time
+            Employee Form</a>
+          <a class="nav-link small" href="../forms/category.php"><i class="fa fa-tags me-2"></i> Category Form</a>
+          <a class="nav-link small" href="../forms/product.php"><i class="fa fa-box-open me-2"></i> Product Form</a>
           <a class="nav-link small" href="../forms/order.php"><i class="fa fa-shopping-cart me-2"></i> Order Form</a>
+          <a class="nav-link small" href="../forms/invoice.php"><i class="fa fa-file-invoice-dollar me-2"></i> Invoice
+            Form</a>
         </div>
 
         <!-- Query Reports -->
@@ -89,7 +95,8 @@
           <i class="fa fa-search me-2"></i> Query Reports <i class="fa fa-caret-down float-end ms-2"></i>
         </a>
         <div class="collapse ps-3 mb-2" id="queryReportsMenu">
-          <a class="nav-link small" href="#"><i class="fa fa-chart-bar me-2"></i> Query Report 1</a>
+          <a class="nav-link small" href="#"><i class="fa fa-chart-bar me-2"></i> List of Employees and their
+            Supervisors</a>
           <a class="nav-link small" href="#"><i class="fa fa-boxes-stacked me-2"></i> Query Report 2</a>
         </div>
 
@@ -99,8 +106,10 @@
           <i class="fa fa-chart-line me-2"></i> Reports <i class="fa fa-caret-down float-end"></i>
         </a>
         <div class="collapse ps-3 mb-2" id="reportsMenu">
-          <a class="nav-link small" href="../reports/employee_query.php"><i class="fa fa-user-check me-2"></i>Employee Report</a>
-          <a class="nav-link small" href="#"><i class="fa fa-user-tie me-2"></i> Full Time Report</a>
+          <a class="nav-link small" href="../reports/employee_report.php"><i class="fa fa-user-check me-2"></i>Employee
+            Report</a>
+          <a class="nav-link small" href="../reports/fulltime_report.php"><i class="fa fa-user-tie me-2"></i> Full Time
+            Report</a>
           <a class="nav-link small" href="#"><i class="fa fa-user-clock me-2"></i> Part Time Report</a>
           <a class="nav-link small" href="#"><i class="fa fa-tags me-2"></i> Category Report</a>
           <a class="nav-link small" href="#"><i class="fa fa-box-open me-2"></i> Product Report</a>
