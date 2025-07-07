@@ -4,8 +4,9 @@ require '../dbconn.php';
 
 if (isset($_GET['prodid'])) {
     $prodid = $_GET['prodid'];
+    $categoryID = $_GET['categoryID'];
 
-    $query = "DELETE FROM PRODUCT WHERE PRODID = :prodid";
+    $query = "UPDATE PRODUCT SET IS_ACTIVE = 'Y' WHERE PRODID = :prodid";
     $stid = oci_parse($dbconn, $query);
     oci_bind_by_name($stid, ":prodid", $prodid);
 
@@ -14,6 +15,6 @@ if (isset($_GET['prodid'])) {
 }
 
 oci_close($dbconn);
-header("Location: product.php");
+header("Location: ../master_detail_forms/category_product/category_detail.php?categoryID=$categoryID");
 exit;
 ?>

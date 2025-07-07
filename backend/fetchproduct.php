@@ -11,7 +11,7 @@ if (!isset($_SESSION['empid'])) {
 
 // Fetch categories
 $categories = [];
-$sqlCat = "SELECT * FROM CATEGORY";
+$sqlCat = "SELECT * FROM CATEGORY WHERE IS_ACTIVE = 'Y'";
 $stmtCat = oci_parse($dbconn, $sqlCat);
 oci_execute($stmtCat);
 while ($row = oci_fetch_assoc($stmtCat)) {
@@ -23,7 +23,7 @@ while ($row = oci_fetch_assoc($stmtCat)) {
 }
 
 // Fetch products
-$sqlProd = "SELECT * FROM PRODUCT";
+$sqlProd = "SELECT * FROM PRODUCT WHERE IS_ACTIVE = 'Y'";
 $stmtProd = oci_parse($dbconn, $sqlProd);
 oci_execute($stmtProd);
 while ($row = oci_fetch_assoc($stmtProd)) {

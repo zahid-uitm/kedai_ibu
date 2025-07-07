@@ -45,7 +45,7 @@ if (isset($_GET['orderid'])) {
     SELECT I.INVOICEID, I.INVOICETOTALAMOUNT, I.INVOICEDATE, I.PAYMENTMETHOD,
         E.EMPLOYEEFIRSTNAME || ' ' || E.EMPLOYEELASTNAME AS EMPNAME, TO_CHAR(O.ORDERDATETIME, 'HH24:MI:SS') AS ORDERTIME
     FROM INVOICE I
-    JOIN EMPLOYEE E ON I.EMPID = E.EMPID
+    LEFT JOIN EMPLOYEE E ON I.EMPID = E.EMPID
     JOIN ORDERS O ON O.ORDERID = I.ORDERID
     WHERE I.INVOICEID = :invid";
 
@@ -111,7 +111,7 @@ oci_close($dbconn);
         <p><strong>Invoice ID:</strong> <?= $invoice['INVOICEID'] ?></p>
         <p><strong>Date:</strong> <?= date('Y-m-d', strtotime($invoice['INVOICEDATE'])) ?></p>
         <p><strong>Order Time:</strong> <?= date('  H:i:s', strtotime($invoice['ORDERTIME'])) ?></p>
-        <p><strong>Cashier:</strong> <?= htmlspecialchars($invoice['EMPNAME']) ?></p>
+        <p><strong>Cashier:</strong> <?= htmlspecialchars($invoice['EMPNAME'] ? $invoice['EMPNAME'] : 'TERMINATED') ?></p>
         <p><strong>Payment Method:</strong> <?= htmlspecialchars($invoice['PAYMENTMETHOD']) ?></p>
 
         <table class="table table-bordered mt-4">
