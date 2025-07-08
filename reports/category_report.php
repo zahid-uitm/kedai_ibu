@@ -38,6 +38,7 @@ while (($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) != false) {
             background-color: #2d3e50;
             color: white;
             width: 250px;
+            flex-shrink: 0;
         }
 
         .sidebar .nav-link {
@@ -65,6 +66,7 @@ while (($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) != false) {
                 <img src="../Logo Kedai Ibu.png" alt="Logo" style="height: 60px; width: auto; margin-right: 10px;">
                 <span>Kedai Ibu</span>
             </h4>
+
             <nav class="nav flex-column">
                 <!-- Home -->
                 <a class="nav-link mb-2" href="../views/dashboard.php">
@@ -77,8 +79,10 @@ while (($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) != false) {
                     <i class="fa fa-file-alt me-2"></i> Master Detail Forms <i class="fa fa-caret-down float-end"></i>
                 </a>
                 <div class="collapse ps-3 mb-2" id="masterDetailFormsMenu">
-                    <a class="nav-link small" href="#"><i class="fa fa-shopping-cart me-2"></i> Order Master Form</a>
-                    <a class="nav-link small" href="#"><i class="fa fa-box-open me-2"></i> Product Master Form</a>
+                    <a class="nav-link small" href="../master_detail_forms/order_product/order_product.php"><i
+                            class="fa fa-shopping-cart me-2"></i> Order Master Form</a>
+                    <a class="nav-link small" href="../master_detail_forms/category_product/category_product.php"><i
+                            class="fa fa-box-open me-2"></i> Product Master Form</a>
                 </div>
 
                 <!-- Forms with accordion -->
@@ -95,12 +99,9 @@ while (($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) != false) {
                     <a class="nav-link small" href="../forms/parttime.php"><i class="fa fa-user-clock me-2"></i>
                         Part-Time
                         Employee Form</a>
-                    <a class="nav-link small" href="../forms/category.php"><i class="fa fa-tags me-2"></i> Category
-                        Form</a>
-                    <a class="nav-link small" href="../forms/product.php"><i class="fa fa-box-open me-2"></i> Product
-                        Form</a>
-                    <a class="nav-link small" href="../forms/order.php"><i class="fa fa-shopping-cart me-2"></i> Order
-                        Form</a>
+                    <!-- <a class="nav-link small" href="../forms/category.php"><i class="fa fa-tags me-2"></i> Category Form</a>
+          <a class="nav-link small" href="../forms/product.php"><i class="fa fa-box-open me-2"></i> Product Form</a>
+          <a class="nav-link small" href="../forms/order.php"><i class="fa fa-shopping-cart me-2"></i> Order Form</a> -->
                     <a class="nav-link small" href="../forms/invoice.php"><i class="fa fa-file-invoice-dollar me-2"></i>
                         Invoice
                         Form</a>
@@ -112,26 +113,36 @@ while (($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) != false) {
                     <i class="fa fa-search me-2"></i> Query Reports <i class="fa fa-caret-down float-end ms-2"></i>
                 </a>
                 <div class="collapse ps-3 mb-2" id="queryReportsMenu">
-                    <a class="nav-link small" href="../query_reports/dailysales_sql.php"><i
-                            class="fa fa-chart-bar me-2"></i>Daily Sales</a>
-                    <a class="nav-link small" href="../query_reports/empperformence_sql.php"><i
-                            class="fa fa-boxes-stacked me-2"></i>Employee Performance</a>
-                    <a class="nav-link small" href="../query_reports/fulltimesalary_sql.php"><i
-                            class="fa fa-boxes-stacked me-2"></i>Fulltime Employee Salary</a>
-                    <a class="nav-link small" href="../query_reports/montlysales_sql.php"><i
-                            class="fa fa-boxes-stacked me-2"></i>Monthly Sales</a>
-                    <a class="nav-link small" href="../query_reports/parttimeearning_sql.php"><i
-                            class="fa fa-boxes-stacked me-2"></i>Part-time Employee Earning</a>
-                    <a class="nav-link small" href="../query_reports/paymentmethod_sql.php"><i
-                            class="fa fa-boxes-stacked me-2"></i>Payment Method</a>
-                    <a class="nav-link small" href="../query_reports/productcategory_sql.php"><i
-                            class="fa fa-boxes-stacked me-2"></i>Product and its Category</a>
-                    <a class="nav-link small" href="../query_reports/productrevenue_sql.php"><i
-                            class="fa fa-boxes-stacked me-2"></i>Product Revenue</a>
-                    <a class="nav-link small" href="../query_reports/showinvoice_sql.php"><i
-                            class="fa fa-boxes-stacked me-2"></i>Show Invoice</a>
-                    <a class="nav-link small" href="../query_reports/supervisorsupervisee_sql.php"><i
-                            class="fa fa-boxes-stacked me-2"></i>Employee and Supervisor</a>
+                    <a class="nav-link small" href="../query_reports/dailysales_sql.php">
+                        <i class="fa fa-calendar-day me-2"></i> Daily Sales
+                    </a>
+                    <a class="nav-link small" href="../query_reports/montlysales_sql.php">
+                        <i class="fa fa-calendar-alt me-2"></i> Monthly Sales
+                    </a>
+                    <a class="nav-link small" href="../query_reports/fulltimesalary_sql.php">
+                        <i class="fa fa-money-bill me-2"></i> Fulltime Employee Salary
+                    </a>
+                    <a class="nav-link small" href="../query_reports/parttimeearning_sql.php">
+                        <i class="fa fa-coins me-2"></i> Part-time Employee Earning
+                    </a>
+                    <a class="nav-link small" href="../query_reports/empperformence_sql.php">
+                        <i class="fa fa-chart-line me-2"></i> Employee Performance
+                    </a>
+                    <a class="nav-link small" href="../query_reports/paymentmethod_sql.php">
+                        <i class="fa fa-credit-card me-2"></i> Payment Method
+                    </a>
+                    <a class="nav-link small" href="../query_reports/productcategory_sql.php">
+                        <i class="fa fa-boxes me-2"></i> Product and its Category
+                    </a>
+                    <a class="nav-link small" href="../query_reports/productrevenue_sql.php">
+                        <i class="fa fa-dollar-sign me-2"></i> Product Revenue
+                    </a>
+                    <a class="nav-link small" href="../query_reports/showinvoice_sql.php">
+                        <i class="fa fa-file-invoice me-2"></i> Show Invoice
+                    </a>
+                    <a class="nav-link small" href="../query_reports/supervisorsupervisee_sql.php">
+                        <i class="fa fa-user-friends me-2"></i> Employee and Supervisor
+                    </a>
                 </div>
 
                 <!-- Reports -->

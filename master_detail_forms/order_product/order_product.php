@@ -7,6 +7,15 @@ if (!$conn) {
   die("Connection failed: " . $e['message']);
 }
 
+//get the employee name to be display
+$empid = $_SESSION['empid'] ?? null;
+
+$query = "SELECT EMPLOYEEFIRSTNAME || ' ' || EMPLOYEELASTNAME AS FULLNAME FROM EMPLOYEE WHERE EMPID = '$empid'";
+$result = oci_parse($conn, $query);
+oci_execute($result);
+$row = oci_fetch_assoc($result);
+$fullname = $row['FULLNAME'] ?? 'Guest';
+
 // Handle add new order
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'addOrder') {
   $newDateTime = $_POST['newDateTime'];
@@ -64,6 +73,7 @@ oci_execute($stid);
       background-color: #2d3e50;
       color: white;
       width: 250px;
+      flex-shrink: 0;
     }
 
     .sidebar .nav-link {
@@ -102,10 +112,14 @@ oci_execute($stid);
   <div class="d-flex min-vh-100">
     <!-- Sidebar -->
     <div class="sidebar p-3">
-      <h4 class="mb-4 fs-5"><i class="fa fa-shop"></i> Kedai Ibu</h4>
+      <h4 class="mb-4 fs-5 d-flex align-items-center">
+        <img src="../../Logo Kedai Ibu.png" alt="Logo" style="height: 60px; width: auto; margin-right: 10px;">
+        <span>Kedai Ibu</span>
+      </h4>
+
       <nav class="nav flex-column">
         <!-- Home -->
-        <a class="nav-link mb-2" href="../views/dashboard.php">
+        <a class="nav-link mb-2" href="../../views/dashboard.php">
           <i class="fa fa-home me-2"></i> Home
         </a>
 
@@ -116,9 +130,9 @@ oci_execute($stid);
         </a>
         <div class="collapse ps-3 mb-2" id="masterDetailFormsMenu">
           <a class="nav-link small" href="../order_product/order_product.php"><i class="fa fa-shopping-cart me-2"></i>
-            Order-Product Master Detail</a>
+            Order Master Form</a>
           <a class="nav-link small" href="../category_product/category_product.php"><i class="fa fa-box-open me-2"></i>
-            Category-Product Master Detail</a>
+            Product Master Form</a>
         </div>
 
         <!-- Forms with accordion -->
@@ -127,11 +141,18 @@ oci_execute($stid);
           <i class="fa fa-file-alt me-2"></i> Forms <i class="fa fa-caret-down float-end"></i>
         </a>
         <div class="collapse ps-3 mb-2" id="formsMenu">
-          <a class="nav-link small" href="../views/employee_form.php"><i class="fa fa-user me-2"></i> Employee Form</a>
-          <a class="nav-link small" href="../views/category_form.php"><i class="fa fa-tags me-2"></i> Category Form</a>
-          <a class="nav-link small" href="../views/product_form.php"><i class="fa fa-box-open me-2"></i> Product
+          <a class="nav-link small" href="../../forms/employee.php"><i class="fa fa-user me-2"></i> Employee Form</a>
+          <a class="nav-link small" href="../../forms/fulltime.php"><i class="fa fa-user-tie me-2"></i> Full-Time
+            Employee
             Form</a>
-          <a class="nav-link small" href="../forms/order.php"><i class="fa fa-shopping-cart me-2"></i> Order Form</a>
+          <a class="nav-link small" href="../../forms/parttime.php"><i class="fa fa-user-clock me-2"></i> Part-Time
+            Employee Form</a>
+          <!-- <a class="nav-link small" href="../forms/category.php"><i class="fa fa-tags me-2"></i> Category Form</a>
+          <a class="nav-link small" href="../forms/product.php"><i class="fa fa-box-open me-2"></i> Product Form</a>
+          <a class="nav-link small" href="../forms/order.php"><i class="fa fa-shopping-cart me-2"></i> Order Form</a> -->
+          <a class="nav-link small" href="../../forms/invoice.php"><i class="fa fa-file-invoice-dollar me-2"></i>
+            Invoice
+            Form</a>
         </div>
 
         <!-- Query Reports -->
@@ -140,8 +161,36 @@ oci_execute($stid);
           <i class="fa fa-search me-2"></i> Query Reports <i class="fa fa-caret-down float-end ms-2"></i>
         </a>
         <div class="collapse ps-3 mb-2" id="queryReportsMenu">
-          <a class="nav-link small" href="#"><i class="fa fa-chart-bar me-2"></i> Query Report 1</a>
-          <a class="nav-link small" href="#"><i class="fa fa-boxes-stacked me-2"></i> Query Report 2</a>
+          <a class="nav-link small" href="../../query_reports/dailysales_sql.php">
+            <i class="fa fa-calendar-day me-2"></i> Daily Sales
+          </a>
+          <a class="nav-link small" href="../../query_reports/montlysales_sql.php">
+            <i class="fa fa-calendar-alt me-2"></i> Monthly Sales
+          </a>
+          <a class="nav-link small" href="../../query_reports/fulltimesalary_sql.php">
+            <i class="fa fa-money-bill me-2"></i> Fulltime Employee Salary
+          </a>
+          <a class="nav-link small" href="../../query_reports/parttimeearning_sql.php">
+            <i class="fa fa-coins me-2"></i> Part-time Employee Earning
+          </a>
+          <a class="nav-link small" href="../../query_reports/empperformence_sql.php">
+            <i class="fa fa-chart-line me-2"></i> Employee Performance
+          </a>
+          <a class="nav-link small" href="../../query_reports/paymentmethod_sql.php">
+            <i class="fa fa-credit-card me-2"></i> Payment Method
+          </a>
+          <a class="nav-link small" href="../../query_reports/productcategory_sql.php">
+            <i class="fa fa-boxes me-2"></i> Product and its Category
+          </a>
+          <a class="nav-link small" href="../../query_reports/productrevenue_sql.php">
+            <i class="fa fa-dollar-sign me-2"></i> Product Revenue
+          </a>
+          <a class="nav-link small" href="../../query_reports/showinvoice_sql.php">
+            <i class="fa fa-file-invoice me-2"></i> Show Invoice
+          </a>
+          <a class="nav-link small" href="../../query_reports/supervisorsupervisee_sql.php">
+            <i class="fa fa-user-friends me-2"></i> Employee and Supervisor
+          </a>
         </div>
 
         <!-- Reports -->
@@ -150,15 +199,26 @@ oci_execute($stid);
           <i class="fa fa-chart-line me-2"></i> Reports <i class="fa fa-caret-down float-end"></i>
         </a>
         <div class="collapse ps-3 mb-2" id="reportsMenu">
-          <a class="nav-link small" href="../reports/employee_query.php"><i class="fa fa-user-check me-2"></i>Employee
+          <a class="nav-link small" href="../../reports/employee_report.php"><i
+              class="fa fa-user-check me-2"></i>Employee
             Report</a>
-          <a class="nav-link small" href="#"><i class="fa fa-user-tie me-2"></i> Full Time Report</a>
-          <a class="nav-link small" href="#"><i class="fa fa-user-clock me-2"></i> Part Time Report</a>
-          <a class="nav-link small" href="#"><i class="fa fa-tags me-2"></i> Category Report</a>
-          <a class="nav-link small" href="#"><i class="fa fa-box-open me-2"></i> Product Report</a>
-          <a class="nav-link small" href="#"><i class="fa fa-boxes-stacked me-2"></i> Orders Report</a>
-          <a class="nav-link small" href="#"><i class="fa fa-cart-plus me-2"></i> OrderProduct Report</a>
-          <a class="nav-link small" href="#"><i class="fa fa-file-invoice-dollar me-2"></i> Invoice Report</a>
+          <a class="nav-link small" href="../../reports/fulltime_report.php"><i class="fa fa-user-tie me-2"></i>
+            Full Time
+            Report</a>
+          <a class="nav-link small" href="../../reports/parttime_report.php"><i class="fa fa-user-clock me-2"></i> Part
+            Time Report</a>
+          <a class="nav-link small" href="../../reports/category_report.php"><i class="fa fa-tags me-2"></i> Category
+            Report</a>
+          <a class="nav-link small" href="../../reports/product_report.php"><i class="fa fa-box-open me-2"></i> Product
+            Report</a>
+          <a class="nav-link small" href="../../reports/orders_report.php"><i class="fa fa-boxes-stacked me-2"></i>
+            Orders
+            Report</a>
+          <a class="nav-link small" href="../../reports/orderproduct_report.php"><i class="fa fa-cart-plus me-2"></i>
+            OrderProduct Report</a>
+          <a class="nav-link small" href="../../reports/invoice_report.php"><i
+              class="fa fa-file-invoice-dollar me-2"></i>
+            Invoice Report</a>
         </div>
       </nav>
     </div>
@@ -167,7 +227,16 @@ oci_execute($stid);
     <div class="flex-fill">
       <div class="header d-flex justify-content-between align-items-center">
         <h4 class="mb-0">Order-Product Master Detail</h4>
-        <div><i class="fa fa-user"></i> Ahmad Zulkifli</div>
+        <div class="dropdown">
+          <div class="d-flex align-items-center dropdown-toggle" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false" style="cursor: pointer;">
+            <i class="fa fa-user me-2"></i><?= htmlspecialchars($fullname) ?>
+          </div>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="../../forms/employee_update2.php?empid=<?= $empid ?>">Profile</a></li>
+            <li><a class="dropdown-item" href="../../backend/logout.php">Logout</a></li>
+          </ul>
+        </div>
       </div>
 
       <div class="container mt-4">
@@ -193,7 +262,8 @@ oci_execute($stid);
                 <i class="fa fa-plus"></i> Add Order
               </button> -->
               <button class="btn btn-success btn-sm">
-                <a href="../../forms/order_product2.php" class="btn btn-success"><i class="fa fa-plus"></i> Add Order</a>
+                <a href="../../forms/order_product2.php" class="btn btn-success"><i class="fa fa-plus"></i> Add
+                  Order</a>
               </button>
             </div>
             <table class="table table-bordered">

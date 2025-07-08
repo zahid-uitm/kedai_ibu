@@ -1,77 +1,68 @@
 <?php
 session_start();
 require '../dbconn.php';
+//get the employee name to be display
+$empid = $_SESSION['empid'] ?? null;
 
-if (!isset($_SESSION['empid'])) {
-  header('Location: ../login.php');
-  exit;
-}
-
-$Fulltime = [];
-
-$sql = "SELECT * FROM FULLTIME";
-$stid = oci_parse($dbconn, $sql);
-oci_execute($stid);
-
-// Fetch results into $Fulltime array
-while (($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) != false) {
-  $Fulltime[] = $row;
-}
+$query = "SELECT EMPLOYEEFIRSTNAME || ' ' || EMPLOYEELASTNAME AS FULLNAME FROM EMPLOYEE WHERE EMPID = '$empid'";
+$result = oci_parse($dbconn, $query);
+oci_execute($result);
+$row = oci_fetch_assoc($result);
+$fullname = $row['FULLNAME'] ?? 'Guest';
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Kedai Ibu | Employee Query</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kedai Ibu | Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    body {
+      background-color: #f4f6f9;
+    }
+
+    .sidebar {
+      background-color: #2d3e50;
+      color: white;
+      width: 250px;
+      flex-shrink: 0;
+    }
+
+    .sidebar .nav-link {
+      color: #cfd8dc;
+    }
+
+    .sidebar .nav-link.active {
+      background-color: #1a252f;
+      color: #fff;
+    }
+
+    .header {
+      background-color: #e74c3c;
+      padding: 10px 20px;
+      color: white;
+    }
+
+    .card-summary {
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .card-summary.green {
+      background-color: #2ecc71;
+      color: white;
+    }
+
+    .card-summary.purple {
+      background-color: #8e44ad;
+      color: white;
+    }
+  </style>
 </head>
-
-<style>
-  body {
-    background-color: #f4f6f9;
-  }
-
-  .sidebar {
-    background-color: #2d3e50;
-    color: white;
-    width: 250px;
-    flex-shrink: 0;
-  }
-
-  .sidebar .nav-link {
-    color: #cfd8dc;
-  }
-
-  .sidebar .nav-link.active {
-    background-color: #1a252f;
-    color: #fff;
-  }
-
-  .header {
-    background-color: #e74c3c;
-    padding: 10px 20px;
-    color: white;
-  }
-
-  .card-summary {
-    border-radius: 10px;
-    padding: 20px;
-  }
-
-  .card-summary.green {
-    background-color: #2ecc71;
-    color: white;
-  }
-
-  .card-summary.purple {
-    background-color: #8e44ad;
-    color: white;
-  }
-</style>
 
 <body>
   <div class="d-flex min-vh-100">
@@ -182,37 +173,86 @@ while (($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) != false) {
         </div>
       </nav>
     </div>
-    <div class="container mt-4">
-      <h1 class="mb-5 text-center">List of Full Time Employees</h1>
 
-      <?php if (count($Fulltime) > 0): ?>
-        <div class="table-responsive">
-          <table class="table table-bordered table-striped">
-            <thead class="table-dark">
-              <tr>
-                <th>Employee ID</th>
-                <th>Salary</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php foreach ($Fulltime as $full): ?>
-                <tr>
-                  <td><?= htmlspecialchars($full['EMPID']) ?></td>
-                  <td>RM <?= number_format($full['SALARY'], 2) ?></td>
-                </tr>
-              <?php endforeach; ?>
-            </tbody>
-          </table>
+    <!-- Main Content -->
+    <div class="flex-fill">
+      <div class="header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Dashboard</h4>
+        <div class="dropdown">
+          <div class="d-flex align-items-center dropdown-toggle" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false" style="cursor: pointer;">
+            <i class="fa fa-user me-2"></i><?= htmlspecialchars($fullname) ?>
+          </div>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="../forms/employee_update2.php?empid=<?= $empid ?>">Profile</a></li>
+            <li><a class="dropdown-item" href="../backend/logout.php">Logout</a></li>
+          </ul>
         </div>
-      <?php else: ?>
-        <div class="alert alert-info">No fulltime data found.</div>
-      <?php endif; ?>
-    </div>
-  </div> <!-- penutup container -->
+      </div>
 
-  <!-- Tambah script di sini -->
+      <div class="container mt-4">
+        <div class="row mb-3">
+          <div class="col-md-3">
+            <label for="start">Start Time</label>
+            <input type="time" class="form-control" id="start" />
+          </div>
+          <div class="col-md-3">
+            <label for="end">End Time</label>
+            <input type="time" class="form-control" id="end" />
+          </div>
+          <div class="col-md-3 d-flex align-items-end">
+            <button class="btn btn-primary w-100">Update</button>
+          </div>
+        </div>
+
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <div class="card-summary green">
+              <h5>Total Sales Revenue</h5>
+              <h2>0.00</h2>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card-summary purple">
+              <h5>Total Customers</h5>
+              <h2>0</h2>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <canvas id="revenueChart" height="100"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Kont'],
+        datasets: [{
+          label: 'Revenue',
+          data: [287.35, 260.00, 250.00, 0, 0],
+          borderColor: '#3498db',
+          tension: 0.3,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: true }
+        }
+      }
+    });
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
 </body>
 
 </html>
